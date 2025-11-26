@@ -1,0 +1,87 @@
+services:
+  # Основний контейнер для збірки
+  build:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: robot_task_distributor_build
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command: /bin/bash -c "echo 'Build complete. Use other services to run nodes.'"
+    stdin_open: true
+    tty: true
+
+  # Контейнер для запуску вузлів робота
+  robot_nodes:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: robot_nodes
+    # volumes:
+    #   - .:/workspace  # Закоментовано: використовуємо збірку з образу
+    working_dir: /workspace
+    command: >
+      bash -c "
+      source /opt/ros/humble/setup.bash &&
+      source /workspace/install/setup.bash &&
+      ros2 launch task_offloading_core robot_nodes.launch.py
+      "
+    network_mode: host
+    restart: unless-stopped
+
+  # Контейнер для крайової станції
+  edge_station:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: edge_station
+    # volumes:
+    #   - .:/workspace  # Закоментовано: використовуємо збірку з образу
+    working_dir: /workspace
+    command: >
+      bash -c "
+      source /opt/ros/humble/setup.bash &&
+      source /workspace/install/setup.bash &&
+      ros2 launch edge_server edge_station.launch.py
+      "
+    network_mode: host
+    restart: unless-stopped
+
+  # Контейнер для генератора тестів
+  test_generator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: test_generator
+    # volumes:
+    #   - .:/workspace  # Закоментовано: використовуємо збірку з образу
+    working_dir: /workspace
+    command: >
+      bash -c "
+      sleep 10 &&
+      source /opt/ros/humble/setup.bash &&
+      source /workspace/install/setup.bash &&
+      ros2 launch task_executor test_generator.launch.py rate:=0.2
+      "
+    network_mode: host
+    restart: unless-stopped
+    depends_on:
+      - robot_nodes
+      - edge_station
+
+  # Інтерактивний контейнер для ручного тестування
+  interactive:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: robot_interactive
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command: /bin/bash
+    network_mode: host
+    stdin_open: true
+    tty: true
+    profiles:
+      - debug

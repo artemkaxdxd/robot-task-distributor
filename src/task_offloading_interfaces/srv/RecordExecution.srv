@@ -1,0 +1,23 @@
+# Service to record execution metrics for profiling
+
+# Request
+uint64 task_id
+string task_type
+TaskParameters parameters
+bool executed_remotely
+float64 estimated_time_sec
+float64 actual_time_sec
+float64 estimated_energy_j
+float64 actual_energy_j
+ExecutionMetrics metrics
+SystemState system_state_at_execution
+NetworkState network_state_at_execution
+
+---
+
+# Response
+bool success
+string message
+
+
+

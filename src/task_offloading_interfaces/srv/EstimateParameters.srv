@@ -1,0 +1,21 @@
+# Service to estimate execution parameters
+
+# Request
+string task_type
+TaskParameters parameters
+SystemState current_system_state
+NetworkState current_network_state
+
+---
+
+# Response
+float64 estimated_time_local_sec
+float64 estimated_time_edge_sec
+float64 estimated_energy_local_j
+float64 estimated_energy_edge_j
+float64 estimated_failure_prob_local
+float64 estimated_failure_prob_edge
+float64 confidence          # Confidence in estimates (0.0-1.0)
+
+
+

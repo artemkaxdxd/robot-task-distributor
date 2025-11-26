@@ -1,0 +1,25 @@
+# Service to decide where to execute a task
+
+# Request
+uint64 task_id
+string task_type
+TaskParameters parameters
+uint64 input_data_size      # Size of input data in bytes
+uint64 output_data_size     # Expected size of output data
+float64 max_latency_sec     # Maximum acceptable latency
+uint8 priority              # Task priority (0-255)
+bool is_critical            # Is this a critical task
+
+---
+
+# Response
+bool execute_remotely       # True = edge, False = local
+float64 estimated_time_local_sec
+float64 estimated_time_edge_sec
+float64 estimated_energy_local_j
+float64 estimated_energy_edge_j
+float64 confidence          # Confidence in the decision (0.0-1.0)
+string reasoning            # Brief explanation of decision
+
+
+

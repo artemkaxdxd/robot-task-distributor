@@ -1,0 +1,20 @@
+# Service to execute a task
+
+# Request
+uint64 task_id
+string task_type
+TaskParameters parameters
+uint8[] input_data          # Binary input data
+uint8 priority
+float64 max_latency_sec
+
+---
+
+# Response
+uint8 status                # 0=success, 1=error, 2=timeout
+string error_message
+uint8[] output_data         # Binary output data
+ExecutionMetrics metrics
+
+
+
