@@ -23,13 +23,10 @@ task_offloading_ws/
 - CMake 3.8+
 - OpenCV 4.x
 
-**Для macOS:** Дивіться [MACOS_SETUP.md](MACOS_SETUP.md) для детальних інструкцій щодо встановлення та запуску на macOS.
-
 ## Встановлення
 
 ### 1. Встановіть ROS 2 Humble
 ```bash
-# Додайте ROS 2 apt repository
 sudo apt update && sudo apt install locales
 sudo locale-gen en_US en_US.UTF-8
 sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
@@ -46,10 +43,8 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-a
 sudo apt update
 sudo apt upgrade
 
-# Встановіть ROS 2 Humble Desktop
 sudo apt install ros-humble-desktop
 
-# Встановіть development tools
 sudo apt install ros-dev-tools
 ```
 
